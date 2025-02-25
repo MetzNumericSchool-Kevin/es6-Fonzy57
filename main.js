@@ -255,65 +255,24 @@ console.log(convertToPerson2(["John", "Doe"]));
 // qui pourrait être modifiée par erreur
 //
 // Migre ce code dans un module, importe le nécéssaire pour l'utiliser
-
-const cart = [];
-
-function addToCart (productInfo, quantity = 1) {
-  const cartLine = findItemInCart(productInfo.product);
-
-  if (cartLine) {
-    cartLine.quantity += quantity;
-    return;
-  }
-
-  cart.push({ ...productInfo, quantity });
-}
-
-function findItemInCart (productName) {
-  return cart.find((cartLine) => cartLine.product === productName);
-}
-
-function updateCartQuantity (productName, quantity) {
-  const cartLine = findItemInCart(productName);
-
-  if (!cartLine) {
-    addToCart(productName, quantity);
-    return;
-  }
-
-  cartLine.quantity = quantity;
-}
-
-function computeTotal () {
-  return cart.reduce(
-    (total, cartLine) => total + cartLine.quantity * cartLine.price,
-    0
-  );
-}
-
-function displayAmount (amount) {
-  return Intl.NumberFormat("fr-FR", {
-    style: "currency",
-    currency: "EUR",
-  }).format(amount);
-}
+import cartModule from "./modules/cartModule.js";
 
 console.log("Exercice 7");
 
 console.log("Ajout d'un Shampoing x2 à 10€");
-addToCart({ product: "Shampoing", price: 10 }, 2);
+cartModule.addToCart({ product: "Shampoing", price: 10 }, 2);
 
 console.log("Mise à jour du panier : Shampoing x4");
-updateCartQuantity("Shampoing", 4);
+cartModule.updateCartQuantity("Shampoing", 4);
 
 console.log("Ajout d'un Biscuit x10 à 3€");
-addToCart({ product: "Biscuit", price: 3 }, 10);
+cartModule.addToCart({ product: "Biscuit", price: 3 }, 10);
 
 console.log("Ajout d'un Biscuit x2 à 3€");
-addToCart({ product: "Biscuit", price: 3 }, 2);
+cartModule.addToCart({ product: "Biscuit", price: 3 }, 2);
 
 console.log("Affichage du total panier :");
-console.log(displayAmount(computeTotal()));
+console.log(cartModule.displayAmount(cartModule.computeTotal()));
 
 /**
  * Exercice 8
