@@ -4,16 +4,8 @@
  */
 
 // Exercice 1.1 : Transforme la concaténation en interpolation de chaîne de caractères avec les backticks `
-function afficheAddresse(address) {
-  return (
-    "Votre adresse est : " +
-    address.street +
-    ", " +
-    address.city +
-    ", " +
-    address.country +
-    "."
-  );
+function afficheAddresse (address) {
+  return `Votre adresse est : ${address.street}, ${address.city}, ${address.country}.`;
 }
 
 console.log("Exercice 1.1");
@@ -28,7 +20,10 @@ console.log(
 // Exercice 1.2 : Utilise les chaînes multilignes avec les backticks ` pour afficher plus simplement le menu
 console.log("Exercice 1.2");
 console.log(
-  "Menu de la semaine :\n    - Pâte à tartine\n    - Hoagie\n    - Salade de pommes"
+  `Menu de la semaine :
+      - Pâte à tartine
+      - Hoagie
+      - Salade de pommes`
 );
 
 /**
@@ -39,17 +34,13 @@ console.log(
 const colors = ["Red", "Green", "Blue", "Yellow"];
 
 // Exercice 2.1 : Utilise la décomposition pour créer les constantes de couleurs plutôt que d'accéder aux indices
-const red = colors[0];
-const green = colors[1];
-const blue = colors[2];
-const yellow = colors[3];
+const [red, green, blue, yellow] = colors;
 
 console.log("Exercice 2.1");
 console.log(red, green, blue, yellow);
 
 // Exercice 2.2 : La même chose, mais en ignorant ici "Red" et "Yellow"
-const green2 = colors[1];
-const blue2 = colors[2];
+const [, green2, blue2,] = colors;
 
 console.log("Exercice 2.2");
 console.log(green2, blue2);
@@ -79,9 +70,7 @@ const roman = {
 };
 
 // Exercices 2.3 : Décompose l'objet pour récupérer le titre, l'éditeur et le tome dans des constantes
-const title = roman.title;
-const editor = roman.editor;
-const tome = roman.tome;
+const { title, editor, tome } = roman;
 
 console.log("Exercice 2.3");
 console.log(title, editor, tome);
@@ -89,9 +78,16 @@ console.log(title, editor, tome);
 // Exercice 2.4 : Décompose l'objet pour récupérer le nom du personnage principal,
 // le nom du premier personnage secondaire
 // et la voix Japonaise dans l'anime du second personnage secondaire
-const mainCharacterName = roman.mainCharacter.name;
+/* const mainCharacterName = roman.mainCharacter.name;
 const secondCharacterName = roman.characters[0].name;
-const thirdCharacterJapaneseVoice = roman.characters[1].animeJapaneseVoice;
+const thirdCharacterJapaneseVoice = roman.characters[1].animeJapaneseVoice; */
+const {
+  mainCharacter: { name: mainCharacterName },
+  characters: [
+    { name: secondCharacterName },
+    { animeJapaneseVoice: thirdCharacterJapaneseVoice }
+  ]
+} = roman;
 
 console.log("Exercice 2.4");
 console.log(
@@ -107,9 +103,7 @@ let lastname = "Doe";
 
 // Exercice 2.5 : Faites l'inversion du prénom et nom avec la décomposition
 // plutôt qu'avoir une variable temporaire
-let temp = firstname;
-firstname = lastname;
-lastname = temp;
+[firstname, lastname] = [lastname, firstname];
 
 console.log("Exercice 2.5");
 console.log(firstname, lastname);
@@ -123,8 +117,8 @@ const person = {
 };
 
 // Exercice 2.6 : Fais une décomposition du paramètre pour extraire directement le prénom et le nom
-function hello(person) {
-  console.log(`Bonjour ${person.firstname} ${person.lastname} !`);
+function hello ({ firstname, lastname }) {
+  console.log(`Bonjour ${firstname} ${lastname} !`);
 }
 
 console.log("Exercice 2.6");
@@ -166,7 +160,7 @@ console.log(Math.min(12, 13, 52, 68, 2, 23, 5));
 
 // Exercice 3.4 : Transforme cette fonction pour qu'elle puisse prendre
 // un nombre indéfini de paramètres car actuellement elle en prend que 3
-function min(a, b, c) {
+function min (a, b, c) {
   return Math.min(a, b, c);
 }
 
@@ -236,7 +230,7 @@ console.log("Exercice 5.2");
 console.log(makeDouble([1, 2, 3]));
 
 // Exercice 5.3 : Convertir en fonction fléchée avec un return implicite
-function convertToPerson(firstnameLastnameTuple) {
+function convertToPerson (firstnameLastnameTuple) {
   return {
     firstname: firstnameLastnameTuple[0],
     lastname: firstnameLastnameTuple[1],
@@ -253,7 +247,7 @@ console.log(convertToPerson(["John", "Doe"]));
 
 // Exercice 6 : raccourci l'assignation à l'objet
 
-function convertToPerson2([firstname, lastname]) {
+function convertToPerson2 ([firstname, lastname]) {
   return {
     firstname: firstname,
     lastname: lastname,
@@ -277,7 +271,7 @@ console.log(convertToPerson2(["John", "Doe"]));
 
 const cart = [];
 
-function addToCart(productInfo, quantity = 1) {
+function addToCart (productInfo, quantity = 1) {
   const cartLine = findItemInCart(productInfo.product);
 
   if (cartLine) {
@@ -288,11 +282,11 @@ function addToCart(productInfo, quantity = 1) {
   cart.push({ ...productInfo, quantity });
 }
 
-function findItemInCart(productName) {
+function findItemInCart (productName) {
   return cart.find((cartLine) => cartLine.product === productName);
 }
 
-function updateCartQuantity(productName, quantity) {
+function updateCartQuantity (productName, quantity) {
   const cartLine = findItemInCart(productName);
 
   if (!cartLine) {
@@ -303,14 +297,14 @@ function updateCartQuantity(productName, quantity) {
   cartLine.quantity = quantity;
 }
 
-function computeTotal() {
+function computeTotal () {
   return cart.reduce(
     (total, cartLine) => total + cartLine.quantity * cartLine.price,
     0
   );
 }
 
-function displayAmount(amount) {
+function displayAmount (amount) {
   return Intl.NumberFormat("fr-FR", {
     style: "currency",
     currency: "EUR",
@@ -341,13 +335,13 @@ console.log(displayAmount(computeTotal()));
 
 // Exercice 8 : Transforme les opérations asynchrone avec la syntaxe async/await
 
-function loadFruits() {
+function loadFruits () {
   return fetch("http://127.0.0.1:5500/data/fruits.json").then((response) =>
     response.json()
   );
 }
 
-function program() {
+function program () {
   loadFruits()
     .then((fruits) => console.log(fruits))
     .catch((error) =>
